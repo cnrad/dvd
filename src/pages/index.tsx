@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 
     const frameWidth = useRef(100);
     const frameHeight = useRef(100);
-    const speed = useRef(1.25);
+    const speed = useRef(1.5);
 
     const resizeWindow = () => {
         frameWidth.current = window.innerWidth;
@@ -24,7 +24,9 @@ const Home: NextPage = () => {
 
         window.addEventListener("resize", resizeWindow);
         window.addEventListener("keypress", (e: any) => (e.key === "=" || e.key === "+" ? (speed.current += 0.5) : ""));
-        window.addEventListener("keypress", (e: any) => (e.key === "-" || e.key === "_" ? (speed.current -= 0.5) : ""));
+        window.addEventListener("keypress", (e: any) => {
+            if ((e.key === "_" || e.key === "-") && speed.current >= 0.5) speed.current -= 0.5;
+        });
 
         return () => window.removeEventListener("resize", resizeWindow);
     }, []);
@@ -91,7 +93,7 @@ const Home: NextPage = () => {
         image.style.top = currentY + "px";
         directionY === "down" ? (currentY += speed.current) : (currentY -= speed.current);
 
-        setTimeout(moveImage, 5);
+        requestAnimationFrame(moveImage);
     };
 
     useEffect(() => {
