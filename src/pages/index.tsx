@@ -102,6 +102,9 @@ const Home: NextPage = () => {
         <>
             <Head>
                 <title>DVD Screensaver</title>
+                <meta name="description" content="i wonder if it'll hit the corner" />
+                <meta name="theme-color" content="#080a11" />
+                <meta property="og:image" content="/dvd.png" />
             </Head>
             <AnimatePresence>
                 {!start && (
