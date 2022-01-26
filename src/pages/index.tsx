@@ -4,9 +4,27 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const Home: NextPage = () => {
+    const imageRef = useRef(null);
     const [start, setStart] = useState(false);
     const [imgSrc, setImgSrc] = useState("/dvd.png");
-    const imageRef = useRef(null);
+    const frameWidth = useRef(100);
+    const frameHeight = useRef(100);
+    const speed = useRef(1);
+
+    const resizeWindow = () => {
+        frameWidth.current = window.innerWidth;
+        frameHeight.current = window.innerHeight;
+    };
+
+    useEffect(() => {
+        frameWidth.current = window.innerWidth;
+        frameHeight.current = window.innerHeight;
+
+        window.addEventListener("resize", resizeWindow);
+        window.addEventListener("keypress", (e: any) => (e.key === "+" ? speed.current++ : ""));
+
+        return () => window.removeEventListener("resize", resizeWindow);
+    }, []);
 
     let currentX = 0;
     let currentY = 0;
@@ -31,15 +49,17 @@ const Home: NextPage = () => {
     };
 
     const moveImage = () => {
-        currentX === 0 ? (directionX = "right") : "";
-        currentX === 300 ? (directionX = "left") : "";
-        (imageRef.current as unknown as HTMLImageElement).style.left = currentX + "px";
-        directionX === "right" ? currentX++ : currentX--;
+        let image = imageRef.current as unknown as HTMLImageElement;
 
-        currentY === 0 ? (directionY = "down") : "";
-        currentY === 120 ? (directionY = "up") : "";
-        (imageRef.current as unknown as HTMLImageElement).style.top = currentY + "px";
-        directionY === "down" ? currentY++ : currentY--;
+        currentX <= 0 ? (directionX = "right") : "";
+        currentX >= frameWidth.current - image.clientWidth ? (directionX = "left") : "";
+        image.style.left = currentX + "px";
+        directionX === "right" ? (currentX += speed.current) : (currentX -= speed.current);
+
+        currentY <= 0 ? (directionY = "down") : "";
+        currentY >= frameHeight.current - image.clientHeight ? (directionY = "up") : "";
+        image.style.top = currentY + "px";
+        directionY === "down" ? (currentY += speed.current) : (currentY -= speed.current);
 
         setTimeout(moveImage, 5);
     };
