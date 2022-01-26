@@ -40,20 +40,13 @@ const Home: NextPage = () => {
         const file = event.target.files[0];
         const reader = new FileReader();
 
-        reader.addEventListener(
-            "load",
-            function () {
-                setImgSrc(reader.result as string);
-            },
-            false
-        );
+        //prettier-ignore
+        reader.addEventListener("load", () => setImgSrc(reader.result as string), false);
 
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+        if (file) reader.readAsDataURL(file);
     };
 
-    let colorArr = ["red", "blue", "green", "yellow", "pink", "purple"];
+    let colorArr = ["red", "blue", "green", "yellow", "pink", "purple", "aqua", "blueviolet", "gold", "cyan"];
 
     const changeColor = () => {
         if (colorChanging === false) return;
@@ -61,7 +54,7 @@ const Home: NextPage = () => {
             let choice = Math.floor(Math.random() * 6);
             (
                 imageRef.current as unknown as HTMLImageElement
-            ).style.filter = `opacity(0.1) drop-shadow(0 0 0.25px ${colorArr[choice]}) drop-shadow(0 0 0.25px ${colorArr[choice]}) drop-shadow(0 0 0.25px ${colorArr[choice]})`;
+            ).style.filter = `opacity(0.1) drop-shadow(0 0 0.25px ${colorArr[choice]}) drop-shadow(0 0 0.25px ${colorArr[choice]}) drop-shadow(0 0 0.25px ${colorArr[choice]}) drop-shadow(0 0 0.25px ${colorArr[choice]})`;
         } else {
             let deg = Math.floor(Math.random() * 360);
             (imageRef.current as unknown as HTMLImageElement).style.filter = `hue-rotate(${deg}deg)`;
